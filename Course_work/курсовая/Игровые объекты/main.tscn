@@ -1,0 +1,60 @@
+[gd_scene load_steps=15 format=3 uid="uid://d10lxawbwav7"]
+
+[ext_resource type="Script" uid="uid://dg2yirbqe2a8a" path="res://scripts/level.gd" id="1_lquwl"]
+[ext_resource type="PackedScene" uid="uid://3cqjg6c07715" path="res://Игровые объекты/modules5.tscn" id="2_5vw27"]
+[ext_resource type="PackedScene" uid="uid://b0ofnj2bajrh1" path="res://Игровые объекты/modules1.tscn" id="2_7mycd"]
+[ext_resource type="PackedScene" uid="uid://dxh8xyc5wruv2" path="res://Игровые объекты/modules2.tscn" id="3_272bh"]
+[ext_resource type="PackedScene" uid="uid://6gwrdamteu3s" path="res://Игровые объекты/modules3.tscn" id="4_5vw27"]
+[ext_resource type="PackedScene" uid="uid://4cway6eqpiy6" path="res://Игровые объекты/modules4.tscn" id="5_kek77"]
+[ext_resource type="Script" uid="uid://o54xm843su2v" path="res://scripts/Player.gd" id="6_272bh"]
+[ext_resource type="Material" uid="uid://bijm7n2bbco7g" path="res://materials/green.tres" id="7_5vw27"]
+[ext_resource type="PackedScene" uid="uid://2htot4yu2a85" path="res://Игровые объекты/Coin.tscn" id="7_kek77"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lquwl"]
+
+[sub_resource type="Sky" id="Sky_lquwl"]
+sky_material = SubResource("ProceduralSkyMaterial_lquwl")
+
+[sub_resource type="Environment" id="Environment_lquwl"]
+background_mode = 2
+sky = SubResource("Sky_lquwl")
+ambient_light_color = Color(0.53333336, 0.53333336, 0.6666667, 1)
+ambient_light_energy = 0.3
+tonemap_mode = 3
+tonemap_exposure = 0.8
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.03
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_kek77"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4c57u"]
+
+[node name="main" type="Node3D"]
+
+[node name="Level" type="Node3D" parent="."]
+script = ExtResource("1_lquwl")
+modules = Array[PackedScene]([ExtResource("2_5vw27"), ExtResource("2_7mycd"), ExtResource("3_272bh"), ExtResource("4_5vw27"), ExtResource("5_kek77")])
+coin_scene = ExtResource("7_kek77")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_lquwl")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4561844, 0)
+script = ExtResource("6_272bh")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
+mesh = SubResource("CapsuleMesh_kek77")
+surface_material_override/0 = ExtResource("7_5vw27")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+shape = SubResource("CapsuleShape3D_4c57u")
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D"]
+transform = Transform3D(-4.371139e-08, 0.5, -0.8660254, 0, 0.8660254, 0.5, 1, 2.1855694e-08, -3.7855173e-08, -3, 2.09, 0)
+
+[node name="DeathSensor" type="RayCast3D" parent="CharacterBody3D"]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
